@@ -38,7 +38,7 @@ Tested on Ubuntu 16.04, 18.04 and CentOS 7, should also run under Debian and Red
 * `check_mk_agent_monitoring_host_wato_secret:`
 * `check_mk_agent_setup_firewall: true` Add firewall rule (ufw/firewalld) when using systemd-socket or xinetd
 * `check_mk_agent_manual_install: false` Leave agent package installation to the user
-* `check_mk_agent_verify_certs: true` Verify SSL certs when callimg WATO API (default is true)
+* `check_mk_agent_verify_certs: true` Verify SSL certs when calling WATO API (default is true). Accepts boolean or a string to path of the CA bundle trust file, for example `/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt`.
 * `check_mk_package_state: present` Package state present/latest, determines whether to upgrade existing packages. 
 
 ## Included check_mk extra plugins
