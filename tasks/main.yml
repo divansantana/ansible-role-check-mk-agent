@@ -164,6 +164,7 @@
     username: "{{ check_mk_agent_monitoring_host_wato_username }}"
     secret: "{{ check_mk_agent_monitoring_host_wato_secret }}"
     validate_certs: "{{ check_mk_agent_validate_certs }}"
+    attributes: "{{ check_mk_agent_attributes }}"
     hostname: "{{ inventory_hostname }}"
     folder: "{{ check_mk_agent_monitoring_host_folder }}"
     state: present
