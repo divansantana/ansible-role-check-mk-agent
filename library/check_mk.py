@@ -80,7 +80,7 @@ options:
 
     validate_certs:
         description:
-            - Verify SSL certificate or not
+            - Verify SSL certificate or not, or path to CA bundle file.
         required: false
         default: True
 
@@ -201,7 +201,7 @@ def main():
         folder=dict(type="str", default=""),
         attributes=dict(type="dict", default={}),
         state=dict(type="str", choices=["present", "absent"], default="present"),
-        validate_certs=dict(type="bool", default=True),
+        validate_certs=dict(type="raw", default=True),
 
         discover_services=dict(type="str", choices=["new", "remove", "fixall", "refresh"]),
         activate_changes=dict(type="bool")
