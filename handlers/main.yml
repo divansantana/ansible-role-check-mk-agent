@@ -15,5 +15,6 @@
   delegate_to: localhost
   # Here only activate the changes once per each
   # check_mk_agent_monitoring_host_url.
+  run_once: yes
   loop: "{{ ansible_play_hosts | map('extract', hostvars,
         ['check_mk_agent_monitoring_host_url']) | flatten | unique }}"
