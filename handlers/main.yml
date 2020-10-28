@@ -7,9 +7,14 @@
 
 - name: Check_mk activate changes via WATO API
   check_mk:
-    server_url: "{{ check_mk_agent_monitoring_host_url }}"
+    server_url: "{{ item }}"
     username: "{{ check_mk_agent_monitoring_host_wato_username }}"
     secret: "{{ check_mk_agent_monitoring_host_wato_secret }}"
     validate_certs: "{{ check_mk_agent_validate_certs }}"
     activate_changes: true
   delegate_to: localhost
+  # Here only activate the changes once per each
+  # check_mk_agent_monitoring_host_url.
+  run_once: yes
+  loop: "{{ ansible_play_hosts | map('extract', hostvars,
+        ['check_mk_agent_monitoring_host_url']) | flatten | unique }}"
