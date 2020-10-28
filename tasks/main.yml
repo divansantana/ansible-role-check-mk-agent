@@ -157,6 +157,7 @@
     folder: "{{ check_mk_agent_monitoring_host_folder }}"
     state: present
   when: check_mk_agent_add_to_wato
+  fork: 5
   register: check_mk_agent_add_host_wato
   delegate_to: localhost
   tags:
