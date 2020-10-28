@@ -157,9 +157,6 @@
     folder: "{{ check_mk_agent_monitoring_host_folder }}"
     state: present
   when: check_mk_agent_add_to_wato
-  # We have seen with a master/slave distributed setup, that trying to register
-  # more then 5 hosts at a time fails, hence the below.
-  throttle: 5
   register: check_mk_agent_add_host_wato
   delegate_to: localhost
   tags:
