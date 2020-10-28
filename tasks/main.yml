@@ -1,13 +1,14 @@
 ---
 # tasks file for check_mk agent
 - name: Install check_mk_agent
-  package:
+  yum:
     name: check-mk-agent
-    state: present
+    state: "{{ check_mk_agent_package_state }}"
+    update_cache: yes
   when: not check_mk_agent_manual_install
 
 - name: Install plugin requirements
-  package:
+  yum:
     name: "{{ item }}"
     state: present
   with_items: "{{ check_mk_agent_plugins_requirements }}"
@@ -17,6 +18,7 @@
     path: /usr/lib/check_mk_agent/plugins/
     owner: root
     group: root
+    mode: 0755
     state: directory
 
 - name: Copy plugins
@@ -55,13 +57,6 @@
         state: started
         enabled: true
 
-    - name: Allow check_mk.socket (ufw)
-      ufw:
-        rule: allow
-        port: 6556
-        proto: tcp
-      when: check_mk_agent_setup_firewall and ansible_os_family == "Debian"
-
     - name: Allow check_mk.socket (firewalld)
       firewalld:
         port: 6556/tcp
@@ -80,20 +75,13 @@
     - name: Install xinetd package
       package:
         name: xinetd
-        state: installed
+        state: present
 
     - name: Start and enable xinetd
       service:
         name: xinetd
         state: started
         enabled: true
-
-    - name: Allow check_mk.socket (ufw)
-      ufw:
-        rule: allow
-        port: 6556
-        proto: tcp
-      when: check_mk_agent_setup_firewall and ansible_os_family == "Debian"
 
     - name: Allow check_mk.socket (firewalld)
       firewalld:
@@ -106,7 +94,7 @@
         - Restart firewalld
   when:
     - not check_mk_agent_over_ssh
-    - check_mk_agent_over_xinetd == True
+    - check_mk_agent_over_xinetd
 
 - name: Setup SSH key
   authorized_key:
@@ -163,6 +151,8 @@
     server_url: "{{ check_mk_agent_monitoring_host_url }}"
     username: "{{ check_mk_agent_monitoring_host_wato_username }}"
     secret: "{{ check_mk_agent_monitoring_host_wato_secret }}"
+    validate_certs: "{{ check_mk_agent_validate_certs }}"
+    attributes: "{{ check_mk_agent_attributes }}"
     hostname: "{{ inventory_hostname }}"
     folder: "{{ check_mk_agent_monitoring_host_folder }}"
     state: present
@@ -177,6 +167,7 @@
     server_url: "{{ check_mk_agent_monitoring_host_url }}"
     username: "{{ check_mk_agent_monitoring_host_wato_username }}"
     secret: "{{ check_mk_agent_monitoring_host_wato_secret }}"
+    validate_certs: "{{ check_mk_agent_validate_certs }}"
     hostname: "{{ inventory_hostname }}"
     discover_services: "{{ check_mk_agent_monitoring_host_discovery_mode }}"
   when: check_mk_agent_add_host_wato.changed
