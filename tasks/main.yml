@@ -2,8 +2,9 @@
 # tasks file for check_mk agent
 - name: Install check_mk_agent
   yum:
-    name: check-mk-agent
-    state: "{{ check_mk_agent_package_state }}"
+    name: "check-mk-agent-{{ check_mk_agent_version }}"
+    state: installed
+    allow_downgrade: yes
     update_cache: yes
   when: not check_mk_agent_manual_install
 
